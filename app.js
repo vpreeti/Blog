@@ -32,17 +32,21 @@ app.get('/posts/:someText', function (req, res) {
 
   const requestedTitle = _.lowerCase(req.params.someText);
   console.log("Requested title= " + requestedTitle);
+  let flag = 0;
   posts.forEach(function (post) {
-    let flag=0;
+
     const storedTitle = _.lowerCase(post.title);
-    if (requestedTitle === storedTitle){
+    if (requestedTitle === storedTitle) {
       console.log("Match");
-      flag=1;
+      const storedPost = post.post;
+      res.render("post",{title:requestedTitle,blogContent:storedPost});
+      flag = 1;
     }
-    
   })
-  if(flag===0){
+  if (flag === 0) {
     console.log(" Not a Match");
+    res.redirect("/");
+    //res.render("home"); // this will throw error coz many fields shall not be popilated at runtime
   }
   console.log("-----------------------------------------")
 })
@@ -55,8 +59,6 @@ app.post("/compose", function (req, res) {
   res.redirect("/");
 
 })
-
-
 
 app.listen(3000, function () {
   console.log("Server started on port 3000");
